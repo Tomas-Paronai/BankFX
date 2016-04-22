@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import main.gui.controller.list.CardItem?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane fx:id="cardContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="accountNumber" layoutX="83.0" layoutY="14.0" text="number">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="17.0" layoutY="36.0" text="Owner:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="17.0" layoutY="11.0" text="Account: ">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="accountOwner" layoutX="83.0" layoutY="36.0" text="Janko hrasko">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="cardBlock" layoutX="17.0" layoutY="64.0" text="block" />
+   </children>
+</Pane>
