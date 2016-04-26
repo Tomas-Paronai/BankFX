@@ -1,32 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import main.gui.controller.list.AccountItem?>
+<?import java.lang.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane fx:id="accountContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="accountContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="62.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label fx:id="accountNumber" layoutX="14.0" layoutY="14.0" text="number">
          <font>
-            <Font size="18.0" />
+            <Font size="15.0" />
          </font>
       </Label>
       <Label layoutX="14.0" layoutY="39.0" text="Balance: ">
          <font>
-            <Font size="14.0" />
+            <Font size="12.0" />
          </font>
       </Label>
       <Label fx:id="accountBalance" layoutX="68.0" layoutY="39.0" text="xxxxxxxx">
          <font>
-            <Font size="14.0" />
+            <Font size="12.0" />
          </font>
       </Label>
-      <Label layoutX="14.0" layoutY="66.0" text="Owner:" />
-      <Label fx:id="accountOwner" layoutX="68.0" layoutY="65.0" text="Janko hrasko">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
+      <Button fx:id="deleteAccountButton" layoutX="539.0" layoutY="19.0" mnemonicParsing="false" text="X" />
    </children>
 </Pane>

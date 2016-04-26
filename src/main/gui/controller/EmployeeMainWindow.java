@@ -30,6 +30,7 @@ public class EmployeeMainWindow extends ActionWindow implements DataChangeCallba
 
     private Employee loggedInEmployee;
     private Client selectedClient;
+    private ArrayList<Client> clients;
 
     private Scene parent;
     @FXML private Label welcomeMessage;
@@ -63,29 +64,35 @@ public class EmployeeMainWindow extends ActionWindow implements DataChangeCallba
             ((Button)parent.lookup("#editButton")).setOnAction(this);
         }
 
+        if(parent.lookup("#addAccountButton") != null){
+            ((Button)parent.lookup("#addAccountButton")).setOnAction(this);
+        }
+
+        if(parent.lookup("#addCardButton") != null){
+            ((Button)parent.lookup("#addCardButton")).setOnAction(this);
+        }
+
         initComboBox();
 
     }
 
     private void initComboBox(){
         ComboBox clientsCombo = (ComboBox) parent.lookup("#clientsCombo");
-        ArrayList<Client> result = null;
+        clientsCombo.getItems().clear();
+        clients = new ArrayList<>();
 
         try {
-            String query = "SELECT * FROM clients " +
-                    "left join client_detail on clients.clientid=client_detail.clientid " +
-                    "left join client_login on clients.clientid=client_login.clientid " +
-                    "left join accounts on clients.clientid=accounts.clientid " +
-                    "left join cards on accounts.accountid=cards.accountid";
-            result = Client.parseClients(handlerDB.executeForResult(query));
+
+            String query = "SELECT * FROM Clients";
+            clients = Client.parseClients(handlerDB.executeForResult(query));
+
         } catch (HandlerDB.DBHandlerException e) {
             e.printStackTrace();
             clientsCombo.getItems().add("empty set");
         }
 
-        if(result != null){
-            clientsCombo.getItems().addAll( result );
-            initLists(result);
+        if(clients != null){
+            clientsCombo.getItems().addAll(clients);
         }
 
         clientsCombo.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -109,28 +116,29 @@ public class EmployeeMainWindow extends ActionWindow implements DataChangeCallba
 
                 Text username = (Text) parent.lookup("#usernameField");
                 username.setText(((Client)newValue).getUsername());
+
+                initLists((Client)newValue);
             }
         });
 
-        if(result != null && result.size() > 0){
+        if(clients != null && clients.size() > 0){
             clientsCombo.getSelectionModel().select(0);
         }
 
+
+
     }
 
-    private void initLists(ArrayList<Client> result){
+    private void initLists(Client client){
         ListView<Account> clientAccounts = (ListView<Account>) parent.lookup("#accountsList");
         ListView<Card> clientCards = (ListView<Card>) parent.lookup("#cardsList");
+        clientAccounts.getItems().clear();
+        clientCards.getItems().clear();
 
         if(clientAccounts != null && clientCards != null){
 
-            for(Client tmpClient : result){
-                clientAccounts.getItems().add(tmpClient.getAccount());
-
-                if(tmpClient.getCard() != null){
-                    clientCards.getItems().add(tmpClient.getCard());
-                }
-            }
+            clientAccounts.getItems().addAll(client.getAccount());
+            clientCards.getItems().addAll(client.getCard());
 
             accountListLayout(clientAccounts);
             cardListLayout(clientCards);
@@ -138,11 +146,11 @@ public class EmployeeMainWindow extends ActionWindow implements DataChangeCallba
     }
 
     private void accountListLayout(ListView<Account> clientAccounts) {
-        clientAccounts.setCellFactory(param -> new AccountListCell());
+        clientAccounts.setCellFactory(param -> new AccountListCell(this));
     }
 
     private void cardListLayout(ListView<Card> clientCards){
-        clientCards.setCellFactory(param -> new CardListCell());
+        clientCards.setCellFactory(param -> new CardListCell(this));
     }
 
     private void logOff(ActionEvent event){
@@ -203,7 +211,15 @@ public class EmployeeMainWindow extends ActionWindow implements DataChangeCallba
 
     }
 
-    private void archiveClient(ActionEvent event){
+    private void archiveClient(){
+
+    }
+
+    private void newAccount(){
+
+    }
+
+    private void newCard(){
 
     }
 
@@ -220,10 +236,16 @@ public class EmployeeMainWindow extends ActionWindow implements DataChangeCallba
             newClient((ActionEvent) event, null);
         }
         else if(event.getSource().equals(parent.lookup("#archiveButton"))){
-            archiveClient((ActionEvent) event);
+            archiveClient();
         }
         else if(event.getSource().equals(parent.lookup("#editButton"))){
             newClient((ActionEvent) event,selectedClient);
+        }
+        else if(event.getSource().equals(parent.lookup("#addAccountButton"))){
+            //TODO new account
+        }
+        else if(event.getSource().equals(parent.lookup("#addCardButton"))){
+            //TODO new card
         }
     }
 

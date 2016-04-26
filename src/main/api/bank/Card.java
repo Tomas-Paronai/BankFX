@@ -1,9 +1,13 @@
 package main.api.bank;
 
+import main.Main;
+import main.api.database.HandlerDB;
+import main.gui.controller.list.Item;
+
 /**
  * Created by tomas on 4/22/2016.
  */
-public class Card {
+public class Card implements Item {
 
     private int cardId;
     private Account account;
@@ -45,5 +49,11 @@ public class Card {
                 ", account=" + account +
                 ", active=" + active +
                 '}';
+    }
+
+    @Override
+    public boolean delete() {
+        HandlerDB handlerDB = new HandlerDB(Main.URL,Main.DATABASE,Main.USER,Main.PASS);
+        return handlerDB.executeManipulate("DELETE FROM Cards WHERE CardID='"+cardId+"'");
     }
 }

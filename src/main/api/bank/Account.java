@@ -1,11 +1,14 @@
 package main.api.bank;
 
+import main.Main;
+import main.api.database.HandlerDB;
 import main.api.person.Client;
+import main.gui.controller.list.Item;
 
 /**
  * Created by tomas on 4/22/2016.
  */
-public class Account {
+public class Account implements Item{
 
     private int accountId;
     private Client client;
@@ -36,5 +39,11 @@ public class Account {
                 ", client=" + client +
                 ", balance=" + balance +
                 '}';
+    }
+
+    @Override
+    public boolean delete() {
+        HandlerDB handlerDB = new HandlerDB(Main.URL,Main.DATABASE,Main.USER,Main.PASS);
+        return handlerDB.executeManipulate("DELETE FROM Accounts WHERE AccountID='"+accountId+"'");
     }
 }

@@ -1,7 +1,9 @@
 package main.api.person;
 
+import main.Main;
 import main.api.bank.Account;
 import main.api.bank.Card;
+import main.api.database.HandlerDB;
 
 import java.sql.Date;
 import java.text.DateFormat;
@@ -19,8 +21,8 @@ public class Client extends Person {
     private String tel;
     private String username;
 
-    private Account account;
-    private Card card;
+    private ArrayList<Account> accounts;
+    private ArrayList<Card> cards;
 
     public Client(String id, String firstName, String lastName, String DOB) {
         super(Integer.parseInt(id), firstName, lastName);
@@ -30,6 +32,9 @@ public class Client extends Person {
         else{
             this.DOB = Date.valueOf("2000-01-01");
         }
+
+        accounts = new ArrayList<>();
+        cards = new ArrayList<>();
     }
 
     public void setDOB(Date DOB) {
@@ -65,20 +70,38 @@ public class Client extends Person {
         this.username = username;
     }
 
-    public Account getAccount() {
-        return account;
+    public ArrayList<Account> getAccount() {
+        return accounts;
+    }
+
+    public Account getAccount(int id){
+        for(Account tmpAccount : accounts){
+            if(tmpAccount.getAccountId() == id){
+                return tmpAccount;
+            }
+        }
+        return null;
     }
 
     public void setAccount(Account account) {
-        this.account = account;
+        accounts.add(account);
     }
 
-    public Card getCard() {
-        return card;
+    public ArrayList<Card> getCard() {
+        return cards;
+    }
+
+    public Card getCard(int id){
+        for(Card tmpCard : cards){
+            if(tmpCard.getCardId() == id){
+                return tmpCard;
+            }
+        }
+        return null;
     }
 
     public void setCard(Card card) {
-        this.card = card;
+        cards.add(card);
     }
 
     @Override
@@ -88,37 +111,72 @@ public class Client extends Person {
 
     public static ArrayList<Client> parseClients(HashMap<String,ArrayList<String>> resultSet){
         ArrayList<Client> arrayOfClients = new ArrayList<>();
+        HandlerDB handlerDB = new HandlerDB(Main.URL,Main.DATABASE,Main.USER,Main.PASS);
 
-        int maxRows = 0;
+        int maxCRows = 0;
         for(String tmpKey : resultSet.keySet()){
-            maxRows = resultSet.get(tmpKey).size();
+            maxCRows = resultSet.get(tmpKey).size();
             break;
         }
 
-        for(int row = 0; row < maxRows; row++){
+        for(int cRow = 0; cRow < maxCRows; cRow++){
             Client tmpClient = new Client
-                    (resultSet.get("ClientID").get(row),resultSet.get("FirstName").get(row),resultSet.get("LastName").get(row),null);
+                    (resultSet.get("ClientID").get(cRow),resultSet.get("FirstName").get(cRow),resultSet.get("LastName").get(cRow),null);
 
 
             try {
                 DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                java.util.Date utilDate = format.parse(resultSet.get("DOB").get(row));
+                java.util.Date utilDate = format.parse(resultSet.get("DOB").get(cRow));
                 tmpClient.setDOB(new Date(utilDate.getTime()));
             } catch (ParseException e) {
                 e.printStackTrace();
                 tmpClient.setDOB(new Date(0,0,0));
             }
 
-            Account tmpAccount = new Account(Integer.parseInt(resultSet.get("AccountID").get(row)),tmpClient,Float.parseFloat(resultSet.get("Balance").get(row)));
-            tmpClient.setAccount(tmpAccount);
-            tmpClient.setDetail(resultSet.get("Email").get(row),resultSet.get("Tel").get(row));
-            tmpClient.setUsername(resultSet.get("Username").get(row));
+            try {
+                HashMap<String,ArrayList<String>> accountResult = handlerDB.executeForResult("SELECT * FROM Accounts WHERE ClientID='"+tmpClient.getId()+"'");
+                int maxARows = 0;
+                for(String tmpAKey : accountResult.keySet()){
+                    maxARows = accountResult.get(tmpAKey).size();
+                    break;
+                }
+                for(int aRow = 0; aRow <maxARows; aRow++){
+                    Account tmpAccount = new Account(Integer.parseInt(accountResult.get("AccountID").get(aRow)),tmpClient,Float.parseFloat(accountResult.get("Balance").get(aRow)));
 
-            if(resultSet.get("CardID").get(row) != null){
-                tmpClient.setCard(new Card(Integer.parseInt(resultSet.get("CardID").get(row)),tmpAccount,Integer.parseInt(resultSet.get("Active").get(row))));
+                    try{
+                        HashMap<String,ArrayList<String>> cardResult = handlerDB.executeForResult("SELECT * FROM Cards WHERE AccountID='"+tmpAccount.getAccountId()+"'");
+                        Card tmpCard = new Card(Integer.parseInt(cardResult.get("CardID").get(0)),tmpAccount,Integer.parseInt(cardResult.get("Active").get(0)));
+                        tmpClient.setCard(tmpCard);
+                    }
+                    catch (HandlerDB.DBHandlerException e) {
+                        //e.printStackTrace();
+                        e.toString();
+                    }
+
+                    tmpClient.setAccount(tmpAccount);
+                }
+            } catch (HandlerDB.DBHandlerException e) {
+               // e.printStackTrace();
+                e.toString();
             }
 
+            try{
+                HashMap<String,ArrayList<String>> contactResult = handlerDB.executeForResult("SELECT * FROM Client_detail WHERE ClientID='"+tmpClient.getId()+"'");
+                tmpClient.setDetail(contactResult.get("Email").get(0),contactResult.get("Tel").get(0));
+            } catch (HandlerDB.DBHandlerException e) {
+                //e.printStackTrace();
+                e.toString();
+            }
 
+            try{
+                HashMap<String,ArrayList<String>> loginResult = handlerDB.executeForResult("SELECT * FROM Client_login WHERE ClientID='"+tmpClient.getId()+"'");
+                tmpClient.setUsername(loginResult.get("Username").get(0));
+            } catch (HandlerDB.DBHandlerException e) {
+                //e.printStackTrace();
+                e.toString();
+            }
+
+            //System.out.println(tmpClient.toString()+" Accounts: "+tmpClient.getAccount().size()+" Cards: "+tmpClient.getCard().size());
             arrayOfClients.add(tmpClient);
         }
 
