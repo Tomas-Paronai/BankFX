@@ -23,7 +23,6 @@ public class AccountListCell extends ListCell<Account> {
         }
         if(item != null){
             AccountItem accountItem = new AccountItem(item,callback);
-            accountItem.insertData(String.valueOf(item.getAccountId()),String.valueOf(item.getBalance()));
             setGraphic(accountItem.getAccountContainer());
         }
     }

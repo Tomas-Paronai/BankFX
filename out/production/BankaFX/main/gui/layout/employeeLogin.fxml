@@ -37,9 +37,9 @@
            </font>
        </Label>
    
-       <TextField fx:id="username" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+       <TextField fx:id="username" text="McDonald4" GridPane.columnIndex="1" GridPane.rowIndex="2" />
    
-       <PasswordField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+       <PasswordField fx:id="password" text="12345" GridPane.columnIndex="1" GridPane.rowIndex="3" />
    
        <HBox GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="4">
       <children>

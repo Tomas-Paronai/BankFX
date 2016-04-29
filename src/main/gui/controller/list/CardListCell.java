@@ -23,7 +23,6 @@ public class CardListCell extends ListCell<Card> {
         }
         if(item != null){
             CardItem cardItem = new CardItem(item,callback);
-            cardItem.insertData(String.valueOf(item.getAccount().getAccountId()),item.getAccount().getClient().toString(),item.isActive());
             setGraphic(cardItem.getCardContainer());
         }
     }

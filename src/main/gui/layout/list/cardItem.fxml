@@ -29,5 +29,6 @@
       </Label>
       <Label fx:id="cardBlock" layoutX="17.0" layoutY="56.0" text="block" textFill="#f20202" />
       <Button fx:id="deleteCardButton" layoutX="521.0" layoutY="27.0" mnemonicParsing="false" text="X" />
+      <CheckBox fx:id="isActive" layoutX="461.0" layoutY="31.0" mnemonicParsing="false" text="Active" />
    </children>
 </Pane>

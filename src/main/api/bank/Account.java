@@ -20,6 +20,18 @@ public class Account implements Item{
         this.balance = balance;
     }
 
+    public Account(Client client){
+        this.client = client;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
+    }
+
+    public void setBalance(float balance) {
+        this.balance = balance;
+    }
+
     public int getAccountId() {
         return accountId;
     }

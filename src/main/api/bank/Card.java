@@ -19,6 +19,10 @@ public class Card implements Item {
         this.active = active;
     }
 
+    public Card(boolean active){
+        this.active = active;
+    }
+
     public Card(int cardId, Account account, int active) {
         this.cardId = cardId;
         this.account = account;
@@ -28,6 +32,18 @@ public class Card implements Item {
         else{
             this.active = true;
         }
+    }
+
+    public void setCardId(int cardId) {
+        this.cardId = cardId;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public int getCardId() {

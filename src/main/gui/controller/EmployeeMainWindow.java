@@ -30,6 +30,8 @@ public class EmployeeMainWindow extends ActionWindow implements DataChangeCallba
 
     private Employee loggedInEmployee;
     private Client selectedClient;
+    private Account selectedAccount;
+    private Card selectedCard;
     private ArrayList<Client> clients;
 
     private Scene parent;
@@ -142,6 +144,17 @@ public class EmployeeMainWindow extends ActionWindow implements DataChangeCallba
 
             accountListLayout(clientAccounts);
             cardListLayout(clientCards);
+
+            clientAccounts.setOnMouseClicked(this);
+            clientCards.setOnMouseClicked(this);
+
+            if(clientAccounts.getItems().size() > 0){
+                selectedAccount = clientAccounts.getItems().get(0);
+            }
+
+            if(clientCards.getItems().size() > 0){
+                selectedCard = clientCards.getItems().get(0);
+            }
         }
     }
 
@@ -169,46 +182,11 @@ public class EmployeeMainWindow extends ActionWindow implements DataChangeCallba
     }
 
     private void changePassword(ActionEvent event){
-        Parent root = null;
-        ChangePassword changePasswordWindow = new ChangePassword(loggedInEmployee.getId());
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../layout/changePassword.fxml"));
-            loader.setController(changePasswordWindow);
-            root = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if(root != null){
-            Stage stage = new Stage();
-            stage.setTitle("Chande password");
-            stage.setScene(new Scene(root));
-            stage.show();
-
-            changePasswordWindow.initWindow();
-        }
+        openWindow(new ChangePassword(loggedInEmployee.getId()),"../layout/changePassword.fxml","Change password");
     }
 
     private void newClient(ActionEvent event, Client selected){
-        Parent root = null;
-        NewClientForm newClientForm = new NewClientForm(this,selected);
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../layout/newClientForm.fxml"));
-            loader.setController(newClientForm);
-            root = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if(root != null){
-            Stage stage = new Stage();
-            stage.setTitle("New Client");
-            stage.setScene(new Scene(root));
-            stage.show();
-
-            newClientForm.initWindow();
-        }
-
+        openWindow(new NewClientForm(this,selected),"../layout/newClientForm.fxml","New client");
     }
 
     private void archiveClient(){
@@ -216,11 +194,12 @@ public class EmployeeMainWindow extends ActionWindow implements DataChangeCallba
     }
 
     private void newAccount(){
+        openWindow(new NewAccount(this,selectedClient),"../layout/newAccount.fxml","New account");
 
     }
 
     private void newCard(){
-
+        openWindow(new NewCard(selectedAccount),"../layout/newCard.fxml","Create card");
     }
 
     @Override
@@ -242,10 +221,18 @@ public class EmployeeMainWindow extends ActionWindow implements DataChangeCallba
             newClient((ActionEvent) event,selectedClient);
         }
         else if(event.getSource().equals(parent.lookup("#addAccountButton"))){
-            //TODO new account
+            newAccount();
         }
         else if(event.getSource().equals(parent.lookup("#addCardButton"))){
-            //TODO new card
+            newCard();
+        }
+        else if(event.getSource().equals(parent.lookup("#accountsList"))){
+            ListView<Account> clientAccounts = (ListView<Account>)event.getSource();
+            selectedAccount = clientAccounts.getSelectionModel().getSelectedItem();
+        }
+        else if(event.getSource().equals(parent.lookup("#cardsList"))){
+            ListView<Card> clientCards = (ListView<Card>)event.getSource();
+            selectedCard = clientCards.getSelectionModel().getSelectedItem();
         }
     }
 

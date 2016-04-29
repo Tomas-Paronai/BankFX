@@ -5,6 +5,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <Pane fx:id="accountContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="62.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label fx:id="accountNumber" layoutX="14.0" layoutY="14.0" text="number">
@@ -23,5 +25,14 @@
          </font>
       </Label>
       <Button fx:id="deleteAccountButton" layoutX="539.0" layoutY="19.0" mnemonicParsing="false" text="X" />
+      <Button fx:id="changeBalanceButton" layoutX="480.0" layoutY="19.0" mnemonicParsing="false" >
+         <graphic>
+            <ImageView>
+               <image>
+                  <Image url="@listItemsIco/give_teke.png"/>
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
    </children>
 </Pane>
