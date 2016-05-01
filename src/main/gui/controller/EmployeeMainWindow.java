@@ -10,15 +10,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import main.api.bank.Account;
 import main.api.bank.Card;
+import main.api.bank.Loan;
 import main.api.database.HandlerDB;
 import main.api.person.Client;
 import main.api.person.Employee;
 import main.api.person.Person;
-import main.gui.controller.list.AccountListCell;
-import main.gui.controller.list.CardListCell;
+import main.gui.controller.list.account.AccountListCell;
+import main.gui.controller.list.card.CardListCell;
+import main.gui.controller.list.loan.LoanListCell;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class EmployeeMainWindow extends ActionWindow implements DataChangeCallba
     private Client selectedClient;
     private Account selectedAccount;
     private Card selectedCard;
+    private Loan selectedLoan;
     private ArrayList<Client> clients;
 
     private Scene parent;
@@ -72,6 +74,10 @@ public class EmployeeMainWindow extends ActionWindow implements DataChangeCallba
 
         if(parent.lookup("#addCardButton") != null){
             ((Button)parent.lookup("#addCardButton")).setOnAction(this);
+        }
+
+        if(parent.lookup("#addLoanButton") != null){
+            ((Button)parent.lookup("#addLoanButton")).setOnAction(this);
         }
 
         initComboBox();
@@ -134,19 +140,24 @@ public class EmployeeMainWindow extends ActionWindow implements DataChangeCallba
     private void initLists(Client client){
         ListView<Account> clientAccounts = (ListView<Account>) parent.lookup("#accountsList");
         ListView<Card> clientCards = (ListView<Card>) parent.lookup("#cardsList");
+        ListView<Loan> clientLoans = (ListView<Loan>) parent.lookup("#loansList");
         clientAccounts.getItems().clear();
         clientCards.getItems().clear();
+        clientLoans.getItems().clear();
 
-        if(clientAccounts != null && clientCards != null){
+        if(clientAccounts != null && clientCards != null && clientLoans != null){
 
             clientAccounts.getItems().addAll(client.getAccount());
             clientCards.getItems().addAll(client.getCard());
+            clientLoans.getItems().addAll(client.getLoan());
 
             accountListLayout(clientAccounts);
             cardListLayout(clientCards);
+            loanListLayout(clientLoans);
 
             clientAccounts.setOnMouseClicked(this);
             clientCards.setOnMouseClicked(this);
+            clientLoans.setOnMouseClicked(this);
 
             if(clientAccounts.getItems().size() > 0){
                 selectedAccount = clientAccounts.getItems().get(0);
@@ -154,6 +165,10 @@ public class EmployeeMainWindow extends ActionWindow implements DataChangeCallba
 
             if(clientCards.getItems().size() > 0){
                 selectedCard = clientCards.getItems().get(0);
+            }
+
+            if(clientLoans.getItems().size() > 0){
+                selectedLoan = clientLoans.getItems().get(0);
             }
         }
     }
@@ -164,6 +179,10 @@ public class EmployeeMainWindow extends ActionWindow implements DataChangeCallba
 
     private void cardListLayout(ListView<Card> clientCards){
         clientCards.setCellFactory(param -> new CardListCell(this));
+    }
+
+    private void loanListLayout(ListView<Loan> clientLoans){
+        clientLoans.setCellFactory(param -> new LoanListCell(this));
     }
 
     private void logOff(ActionEvent event){
@@ -226,6 +245,9 @@ public class EmployeeMainWindow extends ActionWindow implements DataChangeCallba
         else if(event.getSource().equals(parent.lookup("#addCardButton"))){
             newCard();
         }
+        else if(event.getSource().equals(parent.lookup("#addLoanButton"))){
+            newLoan();
+        }
         else if(event.getSource().equals(parent.lookup("#accountsList"))){
             ListView<Account> clientAccounts = (ListView<Account>)event.getSource();
             selectedAccount = clientAccounts.getSelectionModel().getSelectedItem();
@@ -234,6 +256,14 @@ public class EmployeeMainWindow extends ActionWindow implements DataChangeCallba
             ListView<Card> clientCards = (ListView<Card>)event.getSource();
             selectedCard = clientCards.getSelectionModel().getSelectedItem();
         }
+        else if(event.getSource().equals(parent.lookup("#loansList"))){
+            ListView<Loan> clientLoans = (ListView<Loan>)event.getSource();
+            selectedLoan = clientLoans.getSelectionModel().getSelectedItem();
+        }
+    }
+
+    private void newLoan() {
+        openWindow(new NewLoan(selectedClient.getAccount(),this),"../layout/newLoan.fxml","New Loan");
     }
 
     @Override

@@ -1,4 +1,4 @@
-package main.gui.controller.list;
+package main.gui.controller.list.card;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -14,13 +14,15 @@ import main.Main;
 import main.api.bank.Card;
 import main.api.database.HandlerDB;
 import main.gui.controller.DataChangeCallback;
+import main.gui.controller.list.Item;
+import main.gui.controller.list.ItemCell;
 
 import java.io.IOException;
 
 /**
  * Created by tomas on 4/22/2016.
  */
-public class CardItem implements EventHandler,ChangeListener<Boolean> {
+public class CardItem extends ItemCell implements ChangeListener<Boolean> {
 
 
 
@@ -30,27 +32,16 @@ public class CardItem implements EventHandler,ChangeListener<Boolean> {
     @FXML private Label cardBlock;
     @FXML private Button deleteCardButton;
     @FXML private CheckBox isActive;
-    private Item item;
-    private DataChangeCallback callback;
     private Card card;
 
     public CardItem(Card item, DataChangeCallback callback) {
-        this.item = item;
+        super(item,callback,"cardItem.fxml");
         this.card = item;
-        this.callback = callback;
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../../layout/list/cardItem.fxml"));
-        loader.setController(this);
-
-        try{
-            loader.load();
-            insertData();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        insertData();
     }
 
-    private void insertData(){
+    @Override
+    public void insertData(){
         this.accountNumber.setText(String.valueOf(card.getAccount().getAccountId()));
         this.accountOwner.setText(card.getAccount().getClient().toString());
         isActive.selectedProperty().setValue(card.isActive());
@@ -65,7 +56,8 @@ public class CardItem implements EventHandler,ChangeListener<Boolean> {
         deleteCardButton.setOnAction(this);
     }
 
-    public Pane getCardContainer() {
+    @Override
+    public Pane getContainer() {
         return cardContainer;
     }
 

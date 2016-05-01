@@ -35,9 +35,9 @@ CREATE TABLE Cards(
 CREATE TABLE Loans(
 	LoanID int(11) auto_increment,
 	ClientID int(11),
-	Interest float(5),
-	Amount float(20),
-	Paid boolean,
+	Interest float(5) default 0,
+	Amount float(20) not null,
+	Paid int(11) default 0,
 	primary key(LoanID),
 	foreign key(ClientID) references Clients(ClientID) on update cascade on delete restrict
 );

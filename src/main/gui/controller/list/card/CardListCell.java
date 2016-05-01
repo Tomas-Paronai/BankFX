@@ -1,4 +1,4 @@
-package main.gui.controller.list;
+package main.gui.controller.list.card;
 
 import javafx.scene.control.ListCell;
 import main.api.bank.Card;
@@ -23,7 +23,7 @@ public class CardListCell extends ListCell<Card> {
         }
         if(item != null){
             CardItem cardItem = new CardItem(item,callback);
-            setGraphic(cardItem.getCardContainer());
+            setGraphic(cardItem.getContainer());
         }
     }
 }

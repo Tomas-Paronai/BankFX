@@ -8,10 +8,15 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    public final static String URL = "192.168.22.69";
+    /*public final static String URL = "192.168.22.69";
     public final static String DATABASE = "itbank14";
     public final static String USER = "parohy";
-    public final static String PASS = "banka";
+    public final static String PASS = "banka";*/
+
+    public final static String URL = "localhost:3306";
+    public final static String DATABASE = "itbank14";
+    public final static String USER = "root";
+    public final static String PASS = "";
 
     @Override
     public void start(Stage primaryStage) throws Exception{
