@@ -1,4 +1,4 @@
-package main.gui.controller.list;
+package main.gui.controller.list.account;
 
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -13,13 +13,15 @@ import javafx.stage.Stage;
 import main.api.bank.Account;
 import main.gui.controller.ChangeBalance;
 import main.gui.controller.DataChangeCallback;
+import main.gui.controller.list.Item;
+import main.gui.controller.list.ItemCell;
 
 import java.io.IOException;
 
 /**
  * Created by tomas on 4/22/2016.
  */
-public class AccountItem implements EventHandler {
+public class AccountItem extends ItemCell {
 
     @FXML private Pane accountContainer;
     @FXML private Label accountNumber;
@@ -27,25 +29,15 @@ public class AccountItem implements EventHandler {
     @FXML private Label accountOwner;
     @FXML private Button deleteAccountButton;
     @FXML private Button changeBalanceButton;
-    private Item item;
     private Account account;
-    private DataChangeCallback callback;
 
     public AccountItem(Account item, DataChangeCallback callback) {
-        this.item = item;
+        super(item,callback,"accountItem.fxml");
         this.account = item;
-        this.callback = callback;
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../../layout/list/accountItem.fxml"));
-        loader.setController(this);
-
-        try{
-            loader.load();
-            insertData();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        insertData();
     }
 
+    @Override
     public void insertData(){
         this.accountNumber.setText(String.valueOf(account.getAccountId()));
         this.accountBalance.setText(String.valueOf(account.getBalance()));
@@ -53,7 +45,8 @@ public class AccountItem implements EventHandler {
         this.changeBalanceButton.setOnAction(this);
     }
 
-    public Pane getAccountContainer() {
+    @Override
+    public Pane getContainer() {
         return accountContainer;
     }
 

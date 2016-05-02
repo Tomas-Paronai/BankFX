@@ -162,6 +162,13 @@
                            <center>
                               <ListView fx:id="loansList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
                            </center>
+                           <bottom>
+                              <HBox prefHeight="25.0" prefWidth="785.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <Button fx:id="addLoanButton" mnemonicParsing="false" text="New Loan" />
+                                 </children>
+                              </HBox>
+                           </bottom>
                         </BorderPane>
                      </content>
                   </Tab>

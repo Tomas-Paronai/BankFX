@@ -1,4 +1,4 @@
-package main.gui.controller.list;
+package main.gui.controller.list.account;
 
 import javafx.scene.control.ListCell;
 import main.api.bank.Account;
@@ -23,7 +23,7 @@ public class AccountListCell extends ListCell<Account> {
         }
         if(item != null){
             AccountItem accountItem = new AccountItem(item,callback);
-            setGraphic(accountItem.getAccountContainer());
+            setGraphic(accountItem.getContainer());
         }
     }
 }

@@ -3,6 +3,7 @@ package main.api.person;
 import main.Main;
 import main.api.bank.Account;
 import main.api.bank.Card;
+import main.api.bank.Loan;
 import main.api.database.HandlerDB;
 
 import java.sql.Date;
@@ -23,6 +24,7 @@ public class Client extends Person {
 
     private ArrayList<Account> accounts;
     private ArrayList<Card> cards;
+    private ArrayList<Loan> loans;
 
     public Client(String id, String firstName, String lastName, String DOB) {
         super(Integer.parseInt(id), firstName, lastName);
@@ -35,6 +37,7 @@ public class Client extends Person {
 
         accounts = new ArrayList<>();
         cards = new ArrayList<>();
+        loans = new ArrayList<>();
     }
 
     public void setDOB(Date DOB) {
@@ -102,6 +105,23 @@ public class Client extends Person {
 
     public void setCard(Card card) {
         cards.add(card);
+    }
+
+    public void setLoan(Loan loan){
+        loans.add(loan);
+    }
+
+    public ArrayList<Loan> getLoan() {
+        return loans;
+    }
+
+    public Loan getLoan(int id){
+        for(Loan tmpLoan : loans){
+            if(tmpLoan.getLoanId() == id){
+                return tmpLoan;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -176,6 +196,23 @@ public class Client extends Person {
                 e.toString();
             }
 
+            try{
+                HashMap<String, ArrayList<String>> loanResult = handlerDB.executeForResult("SELECT * FROM Loans WHERE ClientID='"+tmpClient.getId()+"'");
+                int maxLRows = 0;
+                for(String tmpKey : loanResult.keySet()){
+                    maxLRows = loanResult.get(tmpKey).size();
+                    break;
+                }
+
+                for(int lRow = 0; lRow < maxLRows; lRow++){
+                    Loan tmpLoan = new Loan(loanResult.get("LoanID").get(lRow), loanResult.get("Amount").get(lRow), loanResult.get("Paid").get(lRow), loanResult.get("Interest").get(lRow), tmpClient);
+                    tmpClient.setLoan(tmpLoan);
+                }
+
+            } catch (HandlerDB.DBHandlerException e) {
+                //e.printStackTrace();
+                e.toString();
+            }
             //System.out.println(tmpClient.toString()+" Accounts: "+tmpClient.getAccount().size()+" Cards: "+tmpClient.getCard().size());
             arrayOfClients.add(tmpClient);
         }
