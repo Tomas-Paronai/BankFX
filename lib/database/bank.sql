@@ -8,6 +8,7 @@ CREATE TABLE Clients(
 	DOB date,
 	primary key(ClientID)
 );
+ALTER TABLE Clients AUTO_INCREMENT=1001;
 
 CREATE TABLE Client_detail(
 	ClientID int(11),
@@ -23,6 +24,7 @@ CREATE TABLE Accounts(
 	primary key(AccountID),
 	foreign key(ClientID) references Clients(ClientID) on update cascade on delete cascade
 );
+ALTER TABLE Accounts AUTO_INCREMENT=1001;
 
 CREATE TABLE Cards(
 	CardID int(11) auto_increment,
@@ -31,6 +33,7 @@ CREATE TABLE Cards(
 	primary key(CardID),
 	foreign key(AccountID) references Accounts(AccountID) on update cascade on delete cascade
 );
+ALTER TABLE Cards AUTO_INCREMENT=1001;
 
 CREATE TABLE Loans(
 	LoanID int(11) auto_increment,
@@ -41,6 +44,7 @@ CREATE TABLE Loans(
 	primary key(LoanID),
 	foreign key(ClientID) references Clients(ClientID) on update cascade on delete restrict
 );
+ALTER TABLE Loans AUTO_INCREMENT=1001;
 
 CREATE TABLE Client_login(
 	ClientID int(11),
@@ -51,14 +55,14 @@ CREATE TABLE Client_login(
 );
 
 CREATE TABLE Invalid_access(
-	Username varchar(20),
-	`Date` date,
-	foreign key(Username) references Client_login(Username) on update cascade on delete cascade
+	ClientID int(11),
+	`Date` timestamp,
+	foreign key(ClientID) references Clients(ClientID) on update cascade on delete cascade
 );
 
 CREATE TABLE Client_history_login(
 	ClientID int(11),
-	`Date` date,
+	`Date` timestamp,
 	foreign key(ClientID) references Clients(ClientID) on update cascade on delete cascade
 );
 
@@ -76,6 +80,7 @@ CREATE TABLE Employees(
 	primary key(EmployeeID),
 	foreign key(PositionID) references Positions(PositionID) on update cascade
 );
+ALTER TABLE Employees AUTO_INCREMENT=1001;
 
 CREATE TABLE Employee_history_login(
 	EmployeeID int(11),
@@ -102,11 +107,12 @@ CREATE TABLE Transactions(
 	AccountID int(11),
 	`Type` int(11),
 	`Value` float(20),
-	`Date` date,
+	`Date` timestamp,
 	primary key(TransactionID),
 	foreign key(`Type`) references Transaction_type(TypeID) on update cascade,
 	foreign key(AccountID) references Accounts(AccountID) on update cascade
 );
+ALTER TABLE Transactions AUTO_INCREMENT=1001;
 
 CREATE TABLE Archived_clients(
 	ClientID int(11),
@@ -126,18 +132,18 @@ INSERT INTO clients (firstname,lastname,dob) VALUES
 
 
 INSERT INTO client_detail(clientid,email,tel) VALUES
-('1','tyler.murray@gmail.com','0902354721'),('2','bailer@centrum.org','0914789896'),
-('3','jayjay@music-tv.com','0912636669'),('4','layla.marsh@gmail.com','0956554774'),
-('5','victoriawatts@yahoo.com','0912235386'),('6','flower475@twitter.com','0923563632'),
-('7','kyliebigdick@pornhub.com','0923536341'),('8','tommy.owen@tommy.blog.com','0922456663'),
-('9','riko.melton@gmail.com','0912634412'),('10','jams.lowe@twitter.com','0921454221'),
-('11','evan@yahoo.com','0987855214');
+('1001','tyler.murray@gmail.com','0902354721'),('1002','bailer@centrum.org','0914789896'),
+('1003','jayjay@music-tv.com','0912636669'),('1004','layla.marsh@gmail.com','0956554774'),
+('1005','victoriawatts@yahoo.com','0912235386'),('1006','flower475@twitter.com','0923563632'),
+('1007','kyliebigdick@pornhub.com','0923536341'),('1008','tommy.owen@tommy.blog.com','0922456663'),
+('1009','riko.melton@gmail.com','0912634412'),('1010','jams.lowe@twitter.com','0921454221'),
+('1011','evan@yahoo.com','0987855214');
 
 INSERT INTO client_login VALUES
-('1','tyMurray','tm1968','1'),('2','baPowell','bp1988','1'),('3','jaByrne','jb1991','1'),
-('4','laMarsh','lm1985','0'),('5','viWatts','vw1993','0'),('6','frHurley','fh1975','1'),
-('7','kyDickerson','kd1989','1'),('8','toOwen','to1986','0'),('9','ryMelton','rm1988','1'),
-('10','jaLowe','jl1979','1'),('11','evShepherd','es1983','1');
+('1001','tyMurray','tm1968','1'),('1002','baPowell','bp1988','1'),('1003','jaByrne','jb1991','1'),
+('1004','laMarsh','lm1985','0'),('1005','viWatts','vw1993','0'),('1006','frHurley','fh1975','1'),
+('1007','kyDickerson','kd1989','1'),('1008','toOwen','to1986','0'),('1009','ryMelton','rm1988','1'),
+('1010','jaLowe','jl1979','1'),('1011','evShepherd','es1983','1');
 
 INSERT INTO positions (name) VALUES 
 ('manager'), ('employee'), ('student'), ('part_time');
@@ -147,23 +153,23 @@ INSERT INTO employees (firstname,lastname, positionid) VALUES
 ('Marisa','Weber','2'),('Abbie','Lawrence','3'),('Clay','Woods','4');
 
 INSERT INTO employee_login VALUES
-('1','McDonald4','12345'),('1','Waltie','12345'),('2','blitz14','12345'),
-('4','mariaweber','12345'),('5','abbiegale1993','12345'),('6','theClayman','12345');
+('1001','McDonald4','12345'),('1001','Waltie','12345'),('1002','blitz14','12345'),
+('1004','mariaweber','12345'),('1005','abbiegale1993','12345'),('1006','theClayman','12345');
 
 INSERT INTO transaction_type (name) VALUES
 ('transfer'),('withdraw'),('deletion');
 
 INSERT INTO accounts (clientid,balance) VALUES
-('1','350'),('2','2210'),('2','15'),('2','123'),('3','550'),
-('4','50'),('4','44'),('5','3252'),('6','456'),('7','64'),
-('8','15'),('8','0'),('8','210'),('9','140'),('10','90'),
-('10','0'),('11','275'),('11','75'),('4','1500');
+('1001','350'),('1002','2210'),('1002','15'),('1002','123'),('1003','550'),
+('1004','50'),('1004','44'),('1005','3252'),('1006','456'),('1007','64'),
+('1008','15'),('1008','0'),('1008','210'),('1009','140'),('1010','90'),
+('1010','0'),('1011','275'),('1011','75'),('1004','1500');
 
 INSERT INTO cards (accountid,active) VALUES
-('1','1'),('5','1'),('6','1'),('8','0'),('9','1'),
-('12','1'),('13','0'),('15','1'),('17','1'),('19','1');
+('1001','1'),('1005','1'),('1006','1'),('1008','0'),('1009','1'),
+('1012','1'),('1013','0'),('1015','1'),('1017','1'),('1019','1');
 
 INSERT INTO loans (clientid,interest,amount,paid) VALUES
-(2,0.2,3500,250), (3,0.15,500,0), (4,0.3,5000,1400),
-(2,0.1,400,0), (7,0.15,4550,1871), (8,0.3,5000,0),
-(5,0.3,1200,0), (9,0.3,4550,1871), (10,0.5,5000,4400);
+(1002,0.2,3500,250), (1003,0.15,500,0), (1004,0.3,5000,1400),
+(1002,0.1,400,0), (1007,0.15,4550,1871), (1008,0.3,5000,0),
+(1005,0.3,1200,0), (1009,0.3,4550,1871), (1010,0.5,5000,4400);
